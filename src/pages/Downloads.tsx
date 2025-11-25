@@ -3,11 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Download, ArrowLeft, Loader2, ShoppingCart } from "lucide-react";
+import { Download, Loader2, ShoppingCart } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { InstagramGate } from "@/components/InstagramGate";
 import { GoogleAuthButton } from "@/components/GoogleAuthButton";
 import { useCart } from "@/contexts/CartContext";
+import { Header } from "@/components/Header";
 import { ScrollToTop } from "@/components/ScrollToTop";
 
 const Downloads = () => {
@@ -100,13 +101,10 @@ const Downloads = () => {
   // Step 1: No user and hasn't followed Instagram
   if (!user && !hasFollowed) {
     return (
-      <div className="min-h-screen bg-gradient-hero p-6">
+      <div className="min-h-screen bg-gradient-hero">
         <ScrollToTop />
-        <div className="max-w-2xl mx-auto space-y-8 py-16 animate-in fade-in duration-500">
-          <Button onClick={handleBack} variant="ghost" className="mb-4">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Voltar ao Carrinho
-          </Button>
+        <Header showBackButton backUrl="/cart" backLabel="Voltar ao Carrinho" />
+        <div className="max-w-2xl mx-auto space-y-8 py-16 px-6 animate-in fade-in duration-500">
 
           <div className="text-center space-y-4 mb-8">
             <ShoppingCart className="h-16 w-16 text-primary mx-auto" />
@@ -130,13 +128,10 @@ const Downloads = () => {
   // Step 2: Followed Instagram but not logged in
   if (!user && hasFollowed) {
     return (
-      <div className="min-h-screen bg-gradient-hero p-6">
+      <div className="min-h-screen bg-gradient-hero">
         <ScrollToTop />
-        <div className="max-w-2xl mx-auto space-y-8 py-16 animate-in fade-in duration-500">
-          <Button onClick={handleBack} variant="ghost" className="mb-4">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Voltar ao Carrinho
-          </Button>
+        <Header showBackButton backUrl="/cart" backLabel="Voltar ao Carrinho" />
+        <div className="max-w-2xl mx-auto space-y-8 py-16 px-6 animate-in fade-in duration-500">
 
           <div className="text-center space-y-4 mb-8">
             <h1 className="text-4xl font-bold tracking-tight">
@@ -168,13 +163,10 @@ const Downloads = () => {
 
   // Step 3: Logged in - show download
   return (
-    <div className="min-h-screen bg-gradient-hero p-6">
+    <div className="min-h-screen bg-gradient-hero">
       <ScrollToTop />
-      <div className="max-w-4xl mx-auto space-y-8 py-16 animate-in fade-in duration-500">
-        <Button onClick={handleBack} variant="ghost" className="mb-4">
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          Voltar ao Carrinho
-        </Button>
+      <Header showBackButton backUrl="/cart" backLabel="Voltar ao Carrinho" />
+      <div className="max-w-4xl mx-auto space-y-8 py-16 px-6 animate-in fade-in duration-500">
 
         <div className="text-center space-y-4 mb-8">
           <h1 className="text-4xl font-bold tracking-tight">

@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
-import { ArrowLeft, Trash2, ShoppingCart, Download } from "lucide-react";
+import { Trash2, ShoppingCart, Download } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ScrollToTop } from "@/components/ScrollToTop";
 
@@ -35,19 +36,7 @@ const Cart = () => {
   return (
     <div className="min-h-screen bg-gradient-hero">
       <ScrollToTop />
-      
-      {/* Header */}
-      <div className="bg-background/80 backdrop-blur-lg border-b border-border/50">
-        <div className="container mx-auto px-4 py-4">
-          <Button
-            onClick={() => navigate("/")}
-            variant="ghost"
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Continuar Comprando
-          </Button>
-        </div>
-      </div>
+      <Header showBackButton backUrl="/" backLabel="Continuar Comprando" />
 
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-4xl mx-auto space-y-8">
@@ -136,12 +125,12 @@ const Cart = () => {
 
                   <p className="text-xs text-muted-foreground">
                     Na próxima etapa você precisará seguir no Instagram e fazer login com Google.{" "}
-                    <a
-                      href="/privacy"
+                    <Link
+                      to="/privacy"
                       className="text-primary hover:underline"
                     >
                       Política de Privacidade
-                    </a>
+                    </Link>
                   </p>
                 </div>
               </Card>
