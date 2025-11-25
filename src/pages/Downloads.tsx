@@ -312,45 +312,53 @@ const Downloads = () => {
               ))}
             </div>
 
-            <div className="grid md:grid-cols-2 gap-4">
-              <Button
-                onClick={handleDownloadIndividual}
-                disabled={downloading}
-                size="lg"
-                className="w-full bg-gradient-primary hover:shadow-glow transition-all duration-300 font-semibold"
-              >
-                {downloading ? (
-                  <>
-                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                    Baixando...
-                  </>
-                ) : (
-                  <>
-                    <Download className="mr-2 h-5 w-5" />
-                    Baixar Individuais
-                  </>
-                )}
-              </Button>
+            <div className="space-y-4">
+              <div className="grid md:grid-cols-2 gap-4">
+                <Button
+                  onClick={handleDownloadIndividual}
+                  disabled={downloading}
+                  size="lg"
+                  className="w-full bg-gradient-primary hover:shadow-glow transition-all duration-300 font-semibold"
+                >
+                  {downloading ? (
+                    <>
+                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                      Baixando...
+                    </>
+                  ) : (
+                    <>
+                      <Download className="mr-2 h-5 w-5" />
+                      Baixar {cart.length} Selecionados
+                    </>
+                  )}
+                </Button>
 
-              <Button
-                onClick={handleDownloadZip}
-                disabled={downloading}
-                size="lg"
-                variant="outline"
-                className="w-full font-semibold hover:bg-muted"
-              >
-                {downloading ? (
-                  <>
-                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                    Baixando...
-                  </>
-                ) : (
-                  <>
-                    <PackageOpen className="mr-2 h-5 w-5" />
-                    Baixar Tudo (ZIP)
-                  </>
-                )}
-              </Button>
+                <Button
+                  onClick={handleDownloadZip}
+                  disabled={downloading}
+                  size="lg"
+                  variant="outline"
+                  className="w-full font-semibold hover:bg-muted"
+                >
+                  {downloading ? (
+                    <>
+                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                      Baixando...
+                    </>
+                  ) : (
+                    <>
+                      <PackageOpen className="mr-2 h-5 w-5" />
+                      Baixar Todos (2.000+ Workflows)
+                    </>
+                  )}
+                </Button>
+              </div>
+
+              <div className="p-3 rounded-lg bg-primary/10 border border-primary/20 text-center">
+                <p className="text-sm text-primary font-medium">
+                  💡 Use "Baixar Todos" para obter os 2.000+ workflows completos em um único arquivo ZIP!
+                </p>
+              </div>
             </div>
           </div>
         </Card>

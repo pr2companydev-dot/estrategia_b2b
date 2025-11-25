@@ -42,25 +42,43 @@ const Index = () => {
       <ScrollToTop />
       <Header />
 
-      {/* Hero Section */}
+        {/* Hero Section */}
       <div className="container mx-auto px-4 py-12">
         <div className="text-center space-y-6 mb-12">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-primary shadow-glow mb-4">
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-primary shadow-glow mb-4 animate-pulse">
             <WorkflowIcon className="w-10 h-10 text-primary-foreground" />
           </div>
           
           <h2 className="text-5xl md:text-6xl font-bold tracking-tight">
             <span className="bg-gradient-primary bg-clip-text text-transparent">
-              Workflows n8n
+              2.000+ Workflows n8n
             </span>
             <br />
             Gratuitos para Você
           </h2>
           
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Navegue, adicione ao carrinho e baixe workflows prontos.
+            Navegue pelos workflows em destaque e baixe TODOS os 2.000+ workflows de uma vez!
             Login necessário apenas no checkout final!
           </p>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-8">
+            <Button
+              size="lg"
+              onClick={() => {
+                const a = document.createElement('a');
+                a.href = '/workflows.zip';
+                a.download = 'n8n-workflows-completo-2000plus.zip';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+              }}
+              className="bg-gradient-primary hover:shadow-glow transition-all duration-300 font-semibold"
+            >
+              <Download className="mr-2 h-5 w-5" />
+              Baixar Todos (2.000+ Workflows)
+            </Button>
+          </div>
         </div>
 
         {/* Search and Filters */}
@@ -118,13 +136,38 @@ const Index = () => {
 
         {/* Workflows Grid */}
         <div className="max-w-7xl mx-auto">
-          <div className="mb-6">
-            <h3 className="text-2xl font-bold mb-2">
-              {filteredWorkflows.length} Workflows Disponíveis
-            </h3>
-            <p className="text-muted-foreground">
-              Adicione ao carrinho e baixe todos de uma vez
-            </p>
+          <div className="mb-6 space-y-3">
+            <div className="flex items-center gap-3 justify-between flex-wrap">
+              <div>
+                <h3 className="text-2xl font-bold mb-2">
+                  {filteredWorkflows.length} Workflows em Destaque
+                </h3>
+                <p className="text-muted-foreground">
+                  Adicione ao carrinho ou baixe todos os 2.000+ workflows de uma vez
+                </p>
+              </div>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  const a = document.createElement('a');
+                  a.href = '/workflows.zip';
+                  a.download = 'n8n-workflows-completo-2000plus.zip';
+                  document.body.appendChild(a);
+                  a.click();
+                  document.body.removeChild(a);
+                }}
+                className="font-medium"
+              >
+                <Download className="mr-2 h-4 w-4" />
+                Download Completo (2.000+)
+              </Button>
+            </div>
+            
+            <div className="p-4 rounded-lg bg-primary/10 border border-primary/20">
+              <p className="text-sm text-primary font-medium text-center">
+                💡 Mostrando {filteredWorkflows.length} workflows em destaque. Use o botão acima para baixar TODOS os 2.000+ workflows de uma vez!
+              </p>
+            </div>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
