@@ -3,19 +3,32 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Download, ArrowLeft, Loader2 } from "lucide-react";
+import { Download, ArrowLeft, Loader2, ShoppingCart } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { InstagramGate } from "@/components/InstagramGate";
 import { GoogleAuthButton } from "@/components/GoogleAuthButton";
+import { useCart } from "@/contexts/CartContext";
 
 const Downloads = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { cart, clearCart } = useCart();
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [hasFollowed, setHasFollowed] = useState(false);
 
   useEffect(() => {
+    // Check if cart is empty
+    if (cart.length === 0) {
+      toast({
+        title: "Carrinho vazio",
+        description: "Adicione workflows ao carrinho antes de fazer o download",
+        variant: "destructive",
+      });
+      navigate("/");
+      return;
+    }
+
     // Check authentication
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user || null);
@@ -30,17 +43,19 @@ const Downloads = () => {
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [cart, navigate, toast]);
 
   const handleDownload = () => {
     toast({
-      title: "Download iniciado",
-      description: "Os workflows do n8n estão sendo baixados...",
+      title: "Download iniciado! 🎉",
+      description: `${cart.length} workflows estão sendo baixados...`,
     });
+    // Here you would implement the actual download logic
+    clearCart();
   };
 
   const handleBack = () => {
-    navigate("/");
+    navigate("/cart");
   };
 
   if (loading) {
@@ -56,21 +71,21 @@ const Downloads = () => {
     return (
       <div className="min-h-screen bg-gradient-hero p-6">
         <div className="max-w-2xl mx-auto space-y-8 py-16">
-          <Button
-            onClick={handleBack}
-            variant="ghost"
-            className="mb-4"
-          >
+          <Button onClick={handleBack} variant="ghost" className="mb-4">
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Voltar
+            Voltar ao Carrinho
           </Button>
 
           <div className="text-center space-y-4 mb-8">
+            <ShoppingCart className="h-16 w-16 text-primary mx-auto" />
             <h1 className="text-4xl font-bold tracking-tight">
-              Quase lá!
+              Etapa 1 de 2
             </h1>
             <p className="text-xl text-muted-foreground">
-              Siga-nos no Instagram para continuar o download
+              Siga-nos no Instagram para continuar
+            </p>
+            <p className="text-sm text-muted-foreground">
+              {cart.length} workflows no carrinho
             </p>
           </div>
 
@@ -85,32 +100,29 @@ const Downloads = () => {
     return (
       <div className="min-h-screen bg-gradient-hero p-6">
         <div className="max-w-2xl mx-auto space-y-8 py-16">
-          <Button
-            onClick={handleBack}
-            variant="ghost"
-            className="mb-4"
-          >
+          <Button onClick={handleBack} variant="ghost" className="mb-4">
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Voltar
+            Voltar ao Carrinho
           </Button>
 
           <div className="text-center space-y-4 mb-8">
             <h1 className="text-4xl font-bold tracking-tight">
-              Última Etapa!
+              Etapa 2 de 2
             </h1>
             <p className="text-xl text-muted-foreground">
-              Faça login com Google para baixar os workflows
+              Faça login com Google para baixar
+            </p>
+            <p className="text-sm text-muted-foreground">
+              {cart.length} workflows no carrinho
             </p>
           </div>
 
           <Card className="p-8 shadow-soft text-center">
             <div className="space-y-6">
               <div className="space-y-2">
-                <h2 className="text-2xl font-bold">
-                  Faça Login para Continuar
-                </h2>
+                <h2 className="text-2xl font-bold">Última Etapa!</h2>
                 <p className="text-muted-foreground">
-                  Use sua conta Google para acessar os downloads
+                  Use sua conta Google para continuar
                 </p>
               </div>
               <GoogleAuthButton />
@@ -125,13 +137,9 @@ const Downloads = () => {
   return (
     <div className="min-h-screen bg-gradient-hero p-6">
       <div className="max-w-4xl mx-auto space-y-8 py-16">
-        <Button
-          onClick={handleBack}
-          variant="ghost"
-          className="mb-4"
-        >
+        <Button onClick={handleBack} variant="ghost" className="mb-4">
           <ArrowLeft className="mr-2 h-4 w-4" />
-          Voltar
+          Voltar ao Carrinho
         </Button>
 
         <div className="text-center space-y-4 mb-8">
@@ -145,49 +153,49 @@ const Downloads = () => {
 
         {/* Download Card */}
         <Card className="p-8 shadow-glow bg-gradient-to-br from-card to-card/50">
-          <div className="space-y-6 text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-primary">
-              <Download className="h-8 w-8 text-primary-foreground" />
+          <div className="space-y-6">
+            <div className="text-center">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-primary mb-4">
+                <Download className="h-8 w-8 text-primary-foreground" />
+              </div>
+              <h2 className="text-2xl font-bold mb-2">
+                {cart.length} Workflows Selecionados
+              </h2>
+              <p className="text-muted-foreground">
+                Todos os workflows que você escolheu
+              </p>
             </div>
 
-            <div>
-              <h2 className="text-2xl font-bold mb-2">
-                Workflows n8n - Coleção Completa
-              </h2>
-              <p className="text-muted-foreground mb-4">
-                Workflows prontos para automatizar seus processos. Inclui
-                exemplos de automação, integrações e muito mais.
-              </p>
-              <div className="flex flex-wrap gap-2 justify-center mb-6">
-                <span className="px-3 py-1 bg-muted rounded-full text-xs font-medium">
-                  Automação
-                </span>
-                <span className="px-3 py-1 bg-muted rounded-full text-xs font-medium">
-                  Integrações
-                </span>
-                <span className="px-3 py-1 bg-muted rounded-full text-xs font-medium">
-                  APIs
-                </span>
-                <span className="px-3 py-1 bg-muted rounded-full text-xs font-medium">
-                  Webhooks
-                </span>
-              </div>
+            <div className="max-h-96 overflow-y-auto space-y-3 px-4">
+              {cart.map((workflow) => (
+                <div
+                  key={workflow.id}
+                  className="p-4 rounded-lg bg-muted/50 text-left"
+                >
+                  <h3 className="font-semibold mb-1">{workflow.title}</h3>
+                  <p className="text-sm text-muted-foreground">
+                    {workflow.description}
+                  </p>
+                </div>
+              ))}
             </div>
 
             <Button
               onClick={handleDownload}
               size="lg"
-              className="bg-gradient-primary hover:shadow-glow transition-all duration-300 font-semibold text-lg px-8"
+              className="w-full bg-gradient-primary hover:shadow-glow transition-all duration-300 font-semibold text-lg"
             >
               <Download className="mr-2 h-5 w-5" />
-              Baixar Workflows Agora
+              Baixar {cart.length} Workflows Agora
             </Button>
           </div>
         </Card>
 
         {/* Info Card */}
         <Card className="p-6 bg-muted/50">
-          <h3 className="font-semibold mb-3 text-center">Como usar os workflows?</h3>
+          <h3 className="font-semibold mb-3 text-center">
+            Como usar os workflows?
+          </h3>
           <ul className="space-y-2 text-sm text-muted-foreground max-w-2xl mx-auto">
             <li>✓ Instale o n8n na sua máquina ou use a versão cloud</li>
             <li>✓ Importe os arquivos .json no seu workspace</li>

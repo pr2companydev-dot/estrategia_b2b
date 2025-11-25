@@ -9,7 +9,7 @@ interface InstagramGateProps {
 
 export const InstagramGate = ({ onFollowed }: InstagramGateProps) => {
   const [hasFollowed, setHasFollowed] = useState(false);
-  const instagramUrl = "https://instagram.com/"; // User will update this
+  const instagramUrl = "https://instagram.com/estrategiab2b"; // Atualize para sua conta
 
   const handleFollowClick = () => {
     window.open(instagramUrl, "_blank");
