@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useNavigate, Link } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
-import { Trash2, ShoppingCart, Download } from "lucide-react";
+import { Trash2, ShoppingCart, Download, PackageOpen } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -110,7 +110,7 @@ const Cart = () => {
                       Pronto para Baixar?
                     </h2>
                     <p className="text-muted-foreground">
-                      Total: {cart.length} workflows gratuitos
+                      Total: {cart.length} workflows selecionados
                     </p>
                   </div>
 
@@ -122,6 +122,27 @@ const Cart = () => {
                     <Download className="mr-2 h-5 w-5" />
                     Fazer Download Grátis
                   </Button>
+
+                  <div className="border-t border-border/50 pt-4">
+                    <p className="text-sm text-muted-foreground mb-3">
+                      Ou baixe todos os 2.000+ workflows de uma vez:
+                    </p>
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        const a = document.createElement('a');
+                        a.href = '/workflows.zip';
+                        a.download = 'n8n-workflows-completo-2000plus.zip';
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                      }}
+                      className="w-full"
+                    >
+                      <PackageOpen className="mr-2 h-4 w-4" />
+                      Download Completo (2.000+ Workflows)
+                    </Button>
+                  </div>
 
                   <p className="text-xs text-muted-foreground">
                     Na próxima etapa você precisará seguir no Instagram e fazer login com Google.{" "}
