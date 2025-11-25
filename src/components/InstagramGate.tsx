@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Instagram, ExternalLink, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Link } from "react-router-dom";
 
 interface InstagramGateProps {
   onFollowed: () => void;
@@ -69,12 +70,12 @@ export const InstagramGate = ({ onFollowed }: InstagramGateProps) => {
 
         <p className="text-xs text-muted-foreground pt-4">
           Ao continuar, você concorda com nossa{" "}
-          <a
-            href="/privacy"
+          <Link
+            to="/privacy"
             className="text-primary hover:underline"
           >
             Política de Privacidade
-          </a>
+          </Link>
         </p>
       </div>
     </Card>

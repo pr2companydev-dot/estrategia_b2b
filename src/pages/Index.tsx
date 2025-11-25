@@ -1,20 +1,17 @@
 import { useState } from "react";
-import { Download, Workflow as WorkflowIcon, Zap, FileJson, ShoppingCart, Search, Check } from "lucide-react";
+import { Download, Workflow as WorkflowIcon, Zap, FileJson, Search, Check, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { useNavigate } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
 import { workflows } from "@/data/workflows";
 import { useToast } from "@/hooks/use-toast";
+import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ScrollToTop } from "@/components/ScrollToTop";
 
 const Index = () => {
-  const navigate = useNavigate();
-  const { cart, addToCart, isInCart } = useCart();
+  const { addToCart, isInCart } = useCart();
   const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("Todos");
@@ -43,33 +40,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-hero">
       <ScrollToTop />
-      
-      {/* Header with Cart */}
-      <div className="sticky top-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border/50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <WorkflowIcon className="w-6 h-6 text-primary" />
-              <h1 className="text-xl font-bold">Estratégia B2B</h1>
-            </div>
-            <div className="flex items-center gap-2">
-              <ThemeToggle />
-              <Button
-                onClick={() => navigate("/cart")}
-                variant="outline"
-                className="relative"
-              >
-                <ShoppingCart className="h-5 w-5" />
-                {cart.length > 0 && (
-                  <Badge className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 bg-primary">
-                    {cart.length}
-                  </Badge>
-                )}
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Header />
 
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-12">
