@@ -18,11 +18,11 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider>
       <CartProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
           <CookieBanner />
-          <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/cart" element={<Cart />} />
