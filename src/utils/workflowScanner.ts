@@ -12,6 +12,11 @@ const GITHUB_RAW_BASE = "https://raw.githubusercontent.com/pr2companydev-dot/est
 
 // Mapeamento de arquivos do repositório
 const WORKFLOW_FILES = [
+  // Schedule
+  { file: "Schedule/0631_Schedule_Wordpress_Automate_Scheduled.json", category: "Automation" },
+  { file: "Schedule/1607_Schedule_Notion_Sync_Scheduled.json", category: "Productivity" },
+  { file: "Schedule/1602_Schedule_Youtube_Create_Scheduled.json", category: "Social Media" },
+  
   // Automation
   { file: "Automation/1290_Automation.json", category: "Automation" },
   
