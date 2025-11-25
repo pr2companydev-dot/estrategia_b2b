@@ -7,6 +7,7 @@ export interface Workflow {
   tags: string[];
   category: string;
   longDescription: string;
+  filename: string;
 }
 
 interface CartContextType {

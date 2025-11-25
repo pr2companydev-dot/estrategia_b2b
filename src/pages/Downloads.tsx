@@ -46,13 +46,43 @@ const Downloads = () => {
     return () => subscription.unsubscribe();
   }, [cart, navigate, toast]);
 
-  const handleDownload = () => {
-    toast({
-      title: "Download iniciado! 🎉",
-      description: `${cart.length} workflows estão sendo baixados...`,
-    });
-    // Here you would implement the actual download logic
-    clearCart();
+  const handleDownload = async () => {
+    try {
+      // Download each workflow JSON file
+      for (const workflow of cart) {
+        const response = await fetch(`/workflows/${workflow.filename}`);
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = workflow.filename;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        
+        // Small delay between downloads
+        await new Promise(resolve => setTimeout(resolve, 300));
+      }
+      
+      toast({
+        title: "Download concluído! 🎉",
+        description: `${cart.length} workflows foram baixados com sucesso`,
+      });
+      
+      clearCart();
+      
+      // Redirect to home after 2 seconds
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
+    } catch (error) {
+      toast({
+        title: "Erro no download",
+        description: "Ocorreu um erro ao baixar os workflows",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleBack = () => {

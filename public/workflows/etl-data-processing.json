@@ -1,0 +1,87 @@
+{
+  "name": "ETL - Processamento de Dados",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "daysInterval": 1
+            }
+          ]
+        }
+      },
+      "name": "Daily Schedule",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.source.com/data",
+        "options": {}
+      },
+      "name": "Extract Data",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "functionCode": "const transformed = items.map(item => ({\n  id: item.json.id,\n  name: item.json.name.toUpperCase(),\n  value: parseFloat(item.json.value),\n  date: new Date().toISOString()\n}));\n\nreturn transformed.map(data => ({json: data}));"
+      },
+      "name": "Transform Data",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "table": "processed_data",
+        "columns": "id,name,value,date"
+      },
+      "name": "Load to Database",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 1,
+      "position": [850, 300]
+    }
+  ],
+  "connections": {
+    "Daily Schedule": {
+      "main": [
+        [
+          {
+            "node": "Extract Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Data": {
+      "main": [
+        [
+          {
+            "node": "Transform Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transform Data": {
+      "main": [
+        [
+          {
+            "node": "Load to Database",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

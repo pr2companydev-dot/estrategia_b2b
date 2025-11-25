@@ -1,0 +1,115 @@
+{
+  "name": "Lead Scoring & Qualification",
+  "nodes": [
+    {
+      "parameters": {
+        "resource": "contact",
+        "event": "propertyChange"
+      },
+      "name": "HubSpot Trigger",
+      "type": "n8n-nodes-base.hubspotTrigger",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "functionCode": "let score = 0;\nconst contact = items[0].json;\n\n// Engagement score\nif (contact.email_opens > 5) score += 20;\nif (contact.link_clicks > 3) score += 15;\nif (contact.form_submissions > 0) score += 25;\n\n// Profile score\nif (contact.company_size === 'large') score += 30;\nif (contact.job_title?.includes('Director') || contact.job_title?.includes('Manager')) score += 20;\n\n// Activity recency\nconst lastActivity = new Date(contact.last_activity_date);\nconst daysSince = Math.floor((Date.now() - lastActivity) / (1000 * 60 * 60 * 24));\nif (daysSince < 7) score += 10;\n\nreturn [{json: {...contact, lead_score: score}}];"
+      },
+      "name": "Calculate Score",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{$json[\"lead_score\"]}}",
+              "operation": "largerEqual",
+              "value2": 70
+            }
+          ]
+        }
+      },
+      "name": "Check if Hot Lead",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "resource": "contact",
+        "operation": "update",
+        "contactId": "={{$json[\"id\"]}}",
+        "updateFields": {
+          "lifecycle_stage": "marketingqualifiedlead",
+          "lead_status": "hot"
+        }
+      },
+      "name": "Update to MQL",
+      "type": "n8n-nodes-base.hubspot",
+      "typeVersion": 1,
+      "position": [850, 250]
+    },
+    {
+      "parameters": {
+        "fromEmail": "sales@example.com",
+        "toEmail": "sales-team@example.com",
+        "subject": "🔥 Novo Lead Qualificado",
+        "emailType": "html",
+        "message": "<h2>Lead Score: {{$json[\"lead_score\"]}}</h2><p><strong>Nome:</strong> {{$json[\"name\"]}}</p><p><strong>Empresa:</strong> {{$json[\"company\"]}}</p><p><strong>Email:</strong> {{$json[\"email\"]}}</p>"
+      },
+      "name": "Notify Sales",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [1050, 250]
+    }
+  ],
+  "connections": {
+    "HubSpot Trigger": {
+      "main": [
+        [
+          {
+            "node": "Calculate Score",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate Score": {
+      "main": [
+        [
+          {
+            "node": "Check if Hot Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check if Hot Lead": {
+      "main": [
+        [
+          {
+            "node": "Update to MQL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update to MQL": {
+      "main": [
+        [
+          {
+            "node": "Notify Sales",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

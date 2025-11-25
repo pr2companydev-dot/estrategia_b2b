@@ -1,0 +1,84 @@
+{
+  "name": "Chatbot WhatsApp Business",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ]
+      },
+      "name": "WhatsApp Trigger",
+      "type": "n8n-nodes-base.whatsappTrigger",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json[\"message\"][\"text\"]}}",
+              "operation": "contains",
+              "value2": "preço"
+            }
+          ]
+        }
+      },
+      "name": "Check Intent",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "chatId": "={{$json[\"message\"][\"from\"]}}",
+        "text": "Nossos produtos variam de R$ 50 a R$ 500. Gostaria de ver o catálogo completo?"
+      },
+      "name": "Send Price Info",
+      "type": "n8n-nodes-base.whatsapp",
+      "typeVersion": 1,
+      "position": [650, 250]
+    },
+    {
+      "parameters": {
+        "chatId": "={{$json[\"message\"][\"from\"]}}",
+        "text": "Olá! Como posso ajudar você hoje?\n\n1️⃣ Ver produtos\n2️⃣ Falar com atendente\n3️⃣ Rastrear pedido"
+      },
+      "name": "Send Menu",
+      "type": "n8n-nodes-base.whatsapp",
+      "typeVersion": 1,
+      "position": [650, 350]
+    }
+  ],
+  "connections": {
+    "WhatsApp Trigger": {
+      "main": [
+        [
+          {
+            "node": "Check Intent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Intent": {
+      "main": [
+        [
+          {
+            "node": "Send Price Info",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send Menu",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

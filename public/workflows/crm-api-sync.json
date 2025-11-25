@@ -1,0 +1,75 @@
+{
+  "name": "Integração CRM - API Sync",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 6
+            }
+          ]
+        }
+      },
+      "name": "Schedule Every 6h",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "resource": "contact",
+        "operation": "getAll",
+        "returnAll": true
+      },
+      "name": "Get CRM Contacts",
+      "type": "n8n-nodes-base.hubspot",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.example.com/contacts/sync",
+        "options": {},
+        "bodyParametersUi": {
+          "parameter": [
+            {
+              "name": "contacts",
+              "value": "={{$json}}"
+            }
+          ]
+        }
+      },
+      "name": "Sync to API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [650, 300]
+    }
+  ],
+  "connections": {
+    "Schedule Every 6h": {
+      "main": [
+        [
+          {
+            "node": "Get CRM Contacts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get CRM Contacts": {
+      "main": [
+        [
+          {
+            "node": "Sync to API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

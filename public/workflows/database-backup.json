@@ -1,0 +1,89 @@
+{
+  "name": "Backup Automático de Dados",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "daysInterval": 1,
+              "triggerAtHour": 2
+            }
+          ]
+        }
+      },
+      "name": "Daily at 2am",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "command": "pg_dump -U postgres -d production > /tmp/backup_$(date +%Y%m%d).sql"
+      },
+      "name": "Create Database Dump",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "bucket": "backups",
+        "fileName": "backup_{{$now.format('YYYYMMDD')}}.sql",
+        "binaryData": true
+      },
+      "name": "Upload to S3",
+      "type": "n8n-nodes-base.awsS3",
+      "typeVersion": 1,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "fromEmail": "backup@example.com",
+        "toEmail": "admin@example.com",
+        "subject": "Backup Completed",
+        "text": "Backup diário concluído com sucesso em {{$now.format('DD/MM/YYYY HH:mm')}}"
+      },
+      "name": "Send Confirmation",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [850, 300]
+    }
+  ],
+  "connections": {
+    "Daily at 2am": {
+      "main": [
+        [
+          {
+            "node": "Create Database Dump",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Database Dump": {
+      "main": [
+        [
+          {
+            "node": "Upload to S3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to S3": {
+      "main": [
+        [
+          {
+            "node": "Send Confirmation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

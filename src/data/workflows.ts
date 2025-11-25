@@ -8,6 +8,7 @@ export const workflows: Workflow[] = [
     longDescription: "Sistema completo de automação de e-mail marketing com triggers baseados em comportamento, segmentação de audiência e personalização de conteúdo. Inclui templates prontos e integração com principais plataformas de e-mail.",
     tags: ["Email", "Automação", "Marketing"],
     category: "Marketing",
+    filename: "email-marketing-automation.json",
   },
   {
     id: 2,
@@ -16,6 +17,7 @@ export const workflows: Workflow[] = [
     longDescription: "Integre seu CRM com múltiplas APIs de forma automática. Sincronize contatos, deals e atividades entre plataformas como Salesforce, HubSpot, Pipedrive e mais. Inclui mapeamento de campos e tratamento de erros.",
     tags: ["API", "Integração", "CRM"],
     category: "Integração",
+    filename: "crm-api-sync.json",
   },
   {
     id: 3,
@@ -24,6 +26,7 @@ export const workflows: Workflow[] = [
     longDescription: "Sistema robusto para receber, processar e rotear webhooks. Envie notificações via Slack, Discord, Telegram ou e-mail. Inclui retry automático e logs detalhados de todas as requisições.",
     tags: ["Webhook", "Notificação", "Real-time"],
     category: "Automação",
+    filename: "webhook-notifications.json",
   },
   {
     id: 4,
@@ -32,6 +35,7 @@ export const workflows: Workflow[] = [
     longDescription: "Pipeline completo de ETL para processar grandes volumes de dados. Extrai de múltiplas fontes, aplica transformações complexas e carrega em bancos de dados ou data warehouses. Otimizado para performance.",
     tags: ["Dados", "ETL", "Processamento"],
     category: "Dados",
+    filename: "etl-data-processing.json",
   },
   {
     id: 5,
@@ -40,6 +44,7 @@ export const workflows: Workflow[] = [
     longDescription: "Gere relatórios profissionais automaticamente com dados atualizados. Exporte em PDF, Excel ou Google Sheets. Agende envios periódicos e personalize layouts e gráficos.",
     tags: ["Relatórios", "PDF", "Excel"],
     category: "Produtividade",
+    filename: "report-generator.json",
   },
   {
     id: 6,
@@ -48,6 +53,7 @@ export const workflows: Workflow[] = [
     longDescription: "Automatize suas publicações nas redes sociais. Poste simultaneamente no Instagram, Facebook, Twitter, LinkedIn e mais. Agende posts, recicle conteúdo e analise métricas.",
     tags: ["Social Media", "Marketing", "Automação"],
     category: "Marketing",
+    filename: "social-media-autopost.json",
   },
   {
     id: 7,
@@ -56,6 +62,7 @@ export const workflows: Workflow[] = [
     longDescription: "Sistema de backup automático para bancos de dados MySQL, PostgreSQL, MongoDB e arquivos. Armazene em Cloud (AWS S3, Google Drive) com versionamento e criptografia.",
     tags: ["Backup", "Segurança", "Cloud"],
     category: "Infraestrutura",
+    filename: "database-backup.json",
   },
   {
     id: 8,
@@ -64,6 +71,7 @@ export const workflows: Workflow[] = [
     longDescription: "Chatbot inteligente para WhatsApp Business. Respostas automáticas, menu interativo, integração com CRM e suporte a múltiplos atendentes. Inclui análise de sentimento e IA.",
     tags: ["WhatsApp", "Chatbot", "Atendimento"],
     category: "Atendimento",
+    filename: "whatsapp-chatbot.json",
   },
   {
     id: 9,
@@ -72,6 +80,7 @@ export const workflows: Workflow[] = [
     longDescription: "Rastreie preços de produtos em lojas concorrentes. Receba alertas de mudanças, gere relatórios comparativos e ajuste seus preços dinamicamente. Suporta principais plataformas de e-commerce.",
     tags: ["E-commerce", "Preços", "Monitoring"],
     category: "E-commerce",
+    filename: "price-monitor.json",
   },
   {
     id: 10,
@@ -80,6 +89,7 @@ export const workflows: Workflow[] = [
     longDescription: "Automatize workflows de tickets no Zendesk. Classificação automática, atribuição inteligente, SLA tracking e respostas automáticas. Integra com Slack e outras ferramentas.",
     tags: ["Suporte", "Tickets", "Zendesk"],
     category: "Atendimento",
+    filename: "zendesk-automation.json",
   },
   {
     id: 11,
@@ -88,6 +98,7 @@ export const workflows: Workflow[] = [
     longDescription: "Sistema inteligente de pontuação de leads baseado em comportamento e dados demográficos. Integra com CRM e ferramentas de marketing para nutrição automática de leads.",
     tags: ["Leads", "Marketing", "CRM"],
     category: "Marketing",
+    filename: "lead-scoring.json",
   },
   {
     id: 12,
@@ -96,5 +107,6 @@ export const workflows: Workflow[] = [
     longDescription: "Crie faturas profissionais automaticamente e envie por e-mail. Integra com sistemas de pagamento, rastreia pagamentos e envia lembretes automáticos de vencimento.",
     tags: ["Faturamento", "Financeiro", "Automação"],
     category: "Financeiro",
+    filename: "invoice-generator.json",
   },
 ];
