@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
 import { workflows } from "@/data/workflows";
 import { useToast } from "@/hooks/use-toast";
+import { Footer } from "@/components/Footer";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -45,7 +46,7 @@ const Index = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <WorkflowIcon className="w-6 h-6 text-primary" />
-              <h1 className="text-xl font-bold">n8n Workflows</h1>
+              <h1 className="text-xl font-bold">Estratégia B2B</h1>
             </div>
             <Button
               onClick={() => navigate("/cart")}
@@ -210,6 +211,8 @@ const Index = () => {
           )}
         </div>
       </div>
+      
+      <Footer />
     </div>
   );
 };

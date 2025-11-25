@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
 import { ArrowLeft, Trash2, ShoppingCart, Download } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Footer } from "@/components/Footer";
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -131,7 +132,13 @@ const Cart = () => {
                   </Button>
 
                   <p className="text-xs text-muted-foreground">
-                    Na próxima etapa você precisará seguir no Instagram e fazer login com Google
+                    Na próxima etapa você precisará seguir no Instagram e fazer login com Google.{" "}
+                    <a
+                      href="/privacy"
+                      className="text-primary hover:underline"
+                    >
+                      Política de Privacidade
+                    </a>
                   </p>
                 </div>
               </Card>
@@ -139,6 +146,8 @@ const Cart = () => {
           )}
         </div>
       </div>
+      
+      <Footer />
     </div>
   );
 };
