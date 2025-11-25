@@ -1,0 +1,115 @@
+{
+  "name": "Sistema de Tickets - Zendesk Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "resource": "ticket",
+        "events": [
+          "ticket.created"
+        ]
+      },
+      "name": "Zendesk Trigger",
+      "type": "n8n-nodes-base.zendeskTrigger",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json[\"priority\"]}}",
+              "operation": "equals",
+              "value2": "urgent"
+            }
+          ]
+        }
+      },
+      "name": "Check Priority",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "resource": "ticket",
+        "operation": "update",
+        "id": "={{$json[\"id\"]}}",
+        "updateFields": {
+          "assigneeId": 12345,
+          "status": "open"
+        }
+      },
+      "name": "Assign to Senior Agent",
+      "type": "n8n-nodes-base.zendesk",
+      "typeVersion": 1,
+      "position": [650, 250]
+    },
+    {
+      "parameters": {
+        "channel": "#support-urgent",
+        "text": "🚨 Novo ticket urgente: {{$json[\"subject\"]}}\nCliente: {{$json[\"requester\"][\"name\"]}}\nLink: {{$json[\"url\"]}}"
+      },
+      "name": "Alert Team",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 1,
+      "position": [850, 250]
+    },
+    {
+      "parameters": {
+        "resource": "ticket",
+        "operation": "update",
+        "id": "={{$json[\"id\"]}}",
+        "updateFields": {
+          "tags": ["auto-classified"]
+        }
+      },
+      "name": "Tag Normal Ticket",
+      "type": "n8n-nodes-base.zendesk",
+      "typeVersion": 1,
+      "position": [650, 350]
+    }
+  ],
+  "connections": {
+    "Zendesk Trigger": {
+      "main": [
+        [
+          {
+            "node": "Check Priority",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Priority": {
+      "main": [
+        [
+          {
+            "node": "Assign to Senior Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Tag Normal Ticket",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assign to Senior Agent": {
+      "main": [
+        [
+          {
+            "node": "Alert Team",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

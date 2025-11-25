@@ -1,0 +1,85 @@
+{
+  "name": "Invoice Generator & Sender",
+  "nodes": [
+    {
+      "parameters": {
+        "resource": "order",
+        "event": "order.created"
+      },
+      "name": "Order Created",
+      "type": "n8n-nodes-base.shopifyTrigger",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "functionCode": "const order = items[0].json;\nconst invoice = {\n  invoice_number: `INV-${Date.now()}`,\n  date: new Date().toISOString().split('T')[0],\n  due_date: new Date(Date.now() + 30*24*60*60*1000).toISOString().split('T')[0],\n  customer: {\n    name: order.customer.name,\n    email: order.customer.email,\n    address: order.billing_address\n  },\n  items: order.line_items.map(item => ({\n    description: item.title,\n    quantity: item.quantity,\n    price: item.price,\n    total: item.quantity * item.price\n  })),\n  subtotal: order.subtotal_price,\n  tax: order.total_tax,\n  total: order.total_price,\n  currency: order.currency\n};\nreturn [{json: invoice}];"
+      },
+      "name": "Generate Invoice Data",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "operation": "htmlToPdf",
+        "html": "<html><body><h1>FATURA {{$json[\"invoice_number\"]}}</h1><p>Data: {{$json[\"date\"]}}</p><p>Vencimento: {{$json[\"due_date\"]}}</p><h2>Cliente</h2><p>{{$json[\"customer\"][\"name\"]}}<br>{{$json[\"customer\"][\"email\"]}}</p><h2>Itens</h2><table><tr><th>Item</th><th>Qtd</th><th>Preço</th><th>Total</th></tr>{{#each $json.items}}<tr><td>{{description}}</td><td>{{quantity}}</td><td>{{price}}</td><td>{{total}}</td></tr>{{/each}}</table><p><strong>Total: {{$json[\"currency\"]}} {{$json[\"total\"]}}</strong></p></body></html>"
+      },
+      "name": "Create PDF",
+      "type": "n8n-nodes-base.htmlToPdf",
+      "typeVersion": 1,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "fromEmail": "billing@example.com",
+        "toEmail": "={{$json[\"customer\"][\"email\"]}}",
+        "subject": "Sua Fatura - {{$json[\"invoice_number\"]}}",
+        "emailType": "html",
+        "message": "<p>Prezado(a) {{$json[\"customer\"][\"name\"]}},</p><p>Segue em anexo a fatura referente ao seu pedido.</p><p>Valor total: {{$json[\"currency\"]}} {{$json[\"total\"]}}</p><p>Vencimento: {{$json[\"due_date\"]}}</p>",
+        "options": {
+          "attachments": "invoice.pdf"
+        }
+      },
+      "name": "Send Invoice Email",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [850, 300]
+    }
+  ],
+  "connections": {
+    "Order Created": {
+      "main": [
+        [
+          {
+            "node": "Generate Invoice Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Invoice Data": {
+      "main": [
+        [
+          {
+            "node": "Create PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create PDF": {
+      "main": [
+        [
+          {
+            "node": "Send Invoice Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

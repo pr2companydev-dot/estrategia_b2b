@@ -1,0 +1,115 @@
+{
+  "name": "Monitor de Preços E-commerce",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 12
+            }
+          ]
+        }
+      },
+      "name": "Every 12 Hours",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://competitor.com/products",
+        "options": {}
+      },
+      "name": "Scrape Competitor Prices",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [450, 300]
+    },
+    {
+      "parameters": {
+        "functionCode": "const prices = [];\nfor (const item of items) {\n  const parsed = {\n    product: item.json.name,\n    price: parseFloat(item.json.price),\n    competitor: 'Competitor A',\n    date: new Date().toISOString()\n  };\n  prices.push({json: parsed});\n}\nreturn prices;"
+      },
+      "name": "Extract Prices",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{$json[\"price\"]}}",
+              "operation": "smaller",
+              "value2": "={{$json[\"our_price\"]}}"
+            }
+          ]
+        }
+      },
+      "name": "Check if Lower",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [850, 300]
+    },
+    {
+      "parameters": {
+        "fromEmail": "pricing@example.com",
+        "toEmail": "manager@example.com",
+        "subject": "⚠️ Alerta de Preço",
+        "text": "O produto {{$json[\"product\"]}} está R$ {{$json[\"price\"]}} no concorrente (nosso preço: R$ {{$json[\"our_price\"]}})"
+      },
+      "name": "Send Alert",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [1050, 300]
+    }
+  ],
+  "connections": {
+    "Every 12 Hours": {
+      "main": [
+        [
+          {
+            "node": "Scrape Competitor Prices",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scrape Competitor Prices": {
+      "main": [
+        [
+          {
+            "node": "Extract Prices",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Prices": {
+      "main": [
+        [
+          {
+            "node": "Check if Lower",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check if Lower": {
+      "main": [
+        [
+          {
+            "node": "Send Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
