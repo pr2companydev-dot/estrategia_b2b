@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Download, Workflow as WorkflowIcon, Zap, FileJson, ShoppingCart, Search, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -51,18 +52,21 @@ const Index = () => {
               <WorkflowIcon className="w-6 h-6 text-primary" />
               <h1 className="text-xl font-bold">Estratégia B2B</h1>
             </div>
-            <Button
-              onClick={() => navigate("/cart")}
-              variant="outline"
-              className="relative"
-            >
-              <ShoppingCart className="h-5 w-5" />
-              {cart.length > 0 && (
-                <Badge className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 bg-primary">
-                  {cart.length}
-                </Badge>
-              )}
-            </Button>
+            <div className="flex items-center gap-2">
+              <ThemeToggle />
+              <Button
+                onClick={() => navigate("/cart")}
+                variant="outline"
+                className="relative"
+              >
+                <ShoppingCart className="h-5 w-5" />
+                {cart.length > 0 && (
+                  <Badge className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 bg-primary">
+                    {cart.length}
+                  </Badge>
+                )}
+              </Button>
+            </div>
           </div>
         </div>
       </div>
