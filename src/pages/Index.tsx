@@ -1,108 +1,160 @@
-import { Download, Workflow, Zap, FileJson } from "lucide-react";
+import { useState } from "react";
+import { Download, Workflow as WorkflowIcon, Zap, FileJson, ShoppingCart, Search, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
+import { useCart } from "@/contexts/CartContext";
+import { workflows } from "@/data/workflows";
+import { useToast } from "@/hooks/use-toast";
 
 const Index = () => {
   const navigate = useNavigate();
+  const { cart, addToCart, isInCart } = useCart();
+  const { toast } = useToast();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("Todos");
 
-  const workflows = [
-    {
-      id: 1,
-      title: "Automação de E-mails",
-      description: "Envio automático de e-mails personalizados com triggers",
-      tags: ["Email", "Automação", "Marketing"],
-    },
-    {
-      id: 2,
-      title: "Integração com APIs",
-      description: "Conecte diferentes APIs e sincronize dados automaticamente",
-      tags: ["API", "Integração", "Dados"],
-    },
-    {
-      id: 3,
-      title: "Webhooks e Notificações",
-      description: "Receba e processe webhooks com notificações em tempo real",
-      tags: ["Webhook", "Notificação", "Real-time"],
-    },
-    {
-      id: 4,
-      title: "Processamento de Dados",
-      description: "Transforme e processe grandes volumes de dados",
-      tags: ["Dados", "ETL", "Processamento"],
-    },
-  ];
+  const categories = ["Todos", ...Array.from(new Set(workflows.map(w => w.category)))];
 
-  const handleDownload = () => {
-    navigate("/downloads");
+  const filteredWorkflows = workflows.filter((workflow) => {
+    const matchesSearch =
+      workflow.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      workflow.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      workflow.tags.some((tag) => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+    
+    const matchesCategory = selectedCategory === "Todos" || workflow.category === selectedCategory;
+    
+    return matchesSearch && matchesCategory;
+  });
+
+  const handleAddToCart = (workflow: typeof workflows[0]) => {
+    addToCart(workflow);
+    toast({
+      title: "Adicionado ao carrinho!",
+      description: workflow.title,
+    });
   };
 
   return (
     <div className="min-h-screen bg-gradient-hero">
+      {/* Header with Cart */}
+      <div className="sticky top-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border/50">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <WorkflowIcon className="w-6 h-6 text-primary" />
+              <h1 className="text-xl font-bold">n8n Workflows</h1>
+            </div>
+            <Button
+              onClick={() => navigate("/cart")}
+              variant="outline"
+              className="relative"
+            >
+              <ShoppingCart className="h-5 w-5" />
+              {cart.length > 0 && (
+                <Badge className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 bg-primary">
+                  {cart.length}
+                </Badge>
+              )}
+            </Button>
+          </div>
+        </div>
+      </div>
+
       {/* Hero Section */}
-      <div className="container mx-auto px-4 py-16">
-        <div className="text-center space-y-6 mb-16">
+      <div className="container mx-auto px-4 py-12">
+        <div className="text-center space-y-6 mb-12">
           <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-primary shadow-glow mb-4">
-            <Workflow className="w-10 h-10 text-primary-foreground" />
+            <WorkflowIcon className="w-10 h-10 text-primary-foreground" />
           </div>
           
-          <h1 className="text-5xl md:text-6xl font-bold tracking-tight">
+          <h2 className="text-5xl md:text-6xl font-bold tracking-tight">
             <span className="bg-gradient-primary bg-clip-text text-transparent">
               Workflows n8n
             </span>
             <br />
             Gratuitos para Você
-          </h1>
+          </h2>
           
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Automatize seus processos com workflows prontos para usar.
-            Baixe gratuitamente e comece a automatizar hoje mesmo!
+            Navegue, adicione ao carrinho e baixe workflows prontos.
+            Login necessário apenas no checkout final!
           </p>
         </div>
 
+        {/* Search and Filters */}
+        <div className="max-w-4xl mx-auto mb-8 space-y-4">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            <Input
+              placeholder="Pesquisar workflows por nome, descrição ou tags..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10 h-12 text-base"
+            />
+          </div>
+          
+          <div className="flex gap-2 flex-wrap">
+            {categories.map((category) => (
+              <Button
+                key={category}
+                variant={selectedCategory === category ? "default" : "outline"}
+                size="sm"
+                onClick={() => setSelectedCategory(category)}
+              >
+                {category}
+              </Button>
+            ))}
+          </div>
+        </div>
+
         {/* Features */}
-        <div className="grid md:grid-cols-3 gap-6 mb-16 max-w-4xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-6 mb-12 max-w-4xl mx-auto">
           <div className="text-center space-y-2 p-6 rounded-xl bg-card/50 backdrop-blur-sm border border-border/50">
             <Download className="w-8 h-8 text-primary mx-auto" />
-            <h3 className="font-semibold">Download Gratuito</h3>
+            <h3 className="font-semibold">100% Gratuito</h3>
             <p className="text-sm text-muted-foreground">
-              Acesso completo aos workflows
+              Todos os workflows grátis
             </p>
           </div>
           
           <div className="text-center space-y-2 p-6 rounded-xl bg-card/50 backdrop-blur-sm border border-border/50">
             <Zap className="w-8 h-8 text-primary mx-auto" />
-            <h3 className="font-semibold">Fácil de Usar</h3>
+            <h3 className="font-semibold">Pronto para Usar</h3>
             <p className="text-sm text-muted-foreground">
-              Importe e customize rapidamente
+              Importe e customize
             </p>
           </div>
           
           <div className="text-center space-y-2 p-6 rounded-xl bg-card/50 backdrop-blur-sm border border-border/50">
-            <Workflow className="w-8 h-8 text-primary mx-auto" />
-            <h3 className="font-semibold">Pronto para Produção</h3>
+            <WorkflowIcon className="w-8 h-8 text-primary mx-auto" />
+            <h3 className="font-semibold">Testados</h3>
             <p className="text-sm text-muted-foreground">
-              Workflows testados e funcionais
+              Workflows funcionais
             </p>
           </div>
         </div>
 
         {/* Workflows Grid */}
-        <div className="max-w-6xl mx-auto space-y-8">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold mb-2">Workflows Disponíveis</h2>
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-6">
+            <h3 className="text-2xl font-bold mb-2">
+              {filteredWorkflows.length} Workflows Disponíveis
+            </h3>
             <p className="text-muted-foreground">
-              Explore nossa coleção de automações prontas
+              Adicione ao carrinho e baixe todos de uma vez
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6">
-            {workflows.map((workflow) => (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredWorkflows.map((workflow) => (
               <Card
                 key={workflow.id}
-                className="p-6 hover:shadow-glow transition-all duration-300 cursor-pointer bg-card/80 backdrop-blur-sm"
+                className="p-6 hover:shadow-glow transition-all duration-300 bg-card/80 backdrop-blur-sm flex flex-col"
               >
-                <div className="flex items-start gap-4">
+                <div className="flex items-start gap-4 mb-4">
                   <div className="p-3 rounded-lg bg-gradient-primary shrink-0">
                     <FileJson className="h-6 w-6 text-primary-foreground" />
                   </div>
@@ -113,43 +165,49 @@ const Index = () => {
                     <p className="text-sm text-muted-foreground mb-3">
                       {workflow.description}
                     </p>
-                    <div className="flex flex-wrap gap-2">
-                      {workflow.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="px-2 py-1 bg-muted rounded-md text-xs font-medium"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
                   </div>
                 </div>
+                
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {workflow.tags.slice(0, 3).map((tag) => (
+                    <span
+                      key={tag}
+                      className="px-2 py-1 bg-muted rounded-md text-xs font-medium"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                <Button
+                  onClick={() => handleAddToCart(workflow)}
+                  disabled={isInCart(workflow.id)}
+                  className="w-full mt-auto"
+                  variant={isInCart(workflow.id) ? "outline" : "default"}
+                >
+                  {isInCart(workflow.id) ? (
+                    <>
+                      <Check className="mr-2 h-4 w-4" />
+                      No Carrinho
+                    </>
+                  ) : (
+                    <>
+                      <ShoppingCart className="mr-2 h-4 w-4" />
+                      Adicionar ao Carrinho
+                    </>
+                  )}
+                </Button>
               </Card>
             ))}
           </div>
 
-          {/* CTA */}
-          <div className="text-center pt-8">
-            <Card className="inline-block p-8 shadow-soft">
-              <div className="space-y-4">
-                <h3 className="text-2xl font-bold">
-                  Pronto para Começar?
-                </h3>
-                <p className="text-muted-foreground max-w-md">
-                  Clique no botão abaixo para baixar todos os workflows gratuitamente
-                </p>
-                <Button
-                  onClick={handleDownload}
-                  size="lg"
-                  className="bg-gradient-primary hover:shadow-glow transition-all duration-300 font-semibold text-lg px-8"
-                >
-                  <Download className="mr-2 h-5 w-5" />
-                  Baixar Workflows Grátis
-                </Button>
-              </div>
-            </Card>
-          </div>
+          {filteredWorkflows.length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground text-lg">
+                Nenhum workflow encontrado com esses critérios
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>
