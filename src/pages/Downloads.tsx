@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { InstagramGate } from "@/components/InstagramGate";
 import { GoogleAuthButton } from "@/components/GoogleAuthButton";
 import { useCart } from "@/contexts/CartContext";
+import { ScrollToTop } from "@/components/ScrollToTop";
 
 const Downloads = () => {
   const navigate = useNavigate();
@@ -70,7 +71,8 @@ const Downloads = () => {
   if (!user && !hasFollowed) {
     return (
       <div className="min-h-screen bg-gradient-hero p-6">
-        <div className="max-w-2xl mx-auto space-y-8 py-16">
+        <ScrollToTop />
+        <div className="max-w-2xl mx-auto space-y-8 py-16 animate-in fade-in duration-500">
           <Button onClick={handleBack} variant="ghost" className="mb-4">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Voltar ao Carrinho
@@ -99,7 +101,8 @@ const Downloads = () => {
   if (!user && hasFollowed) {
     return (
       <div className="min-h-screen bg-gradient-hero p-6">
-        <div className="max-w-2xl mx-auto space-y-8 py-16">
+        <ScrollToTop />
+        <div className="max-w-2xl mx-auto space-y-8 py-16 animate-in fade-in duration-500">
           <Button onClick={handleBack} variant="ghost" className="mb-4">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Voltar ao Carrinho
@@ -136,7 +139,8 @@ const Downloads = () => {
   // Step 3: Logged in - show download
   return (
     <div className="min-h-screen bg-gradient-hero p-6">
-      <div className="max-w-4xl mx-auto space-y-8 py-16">
+      <ScrollToTop />
+      <div className="max-w-4xl mx-auto space-y-8 py-16 animate-in fade-in duration-500">
         <Button onClick={handleBack} variant="ghost" className="mb-4">
           <ArrowLeft className="mr-2 h-4 w-4" />
           Voltar ao Carrinho
