@@ -1,32 +1,41 @@
-import { useState, useEffect } from "react";
+import { Download, Workflow, Zap, FileJson } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
-import { InstagramGate } from "@/components/InstagramGate";
-import { GoogleAuthButton } from "@/components/GoogleAuthButton";
-import { supabase } from "@/integrations/supabase/client";
-import { Download, Workflow, Zap } from "lucide-react";
 
 const Index = () => {
-  const [hasFollowed, setHasFollowed] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // Check if user is already authenticated
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
-        navigate("/downloads");
-      }
-    });
+  const workflows = [
+    {
+      id: 1,
+      title: "Automação de E-mails",
+      description: "Envio automático de e-mails personalizados com triggers",
+      tags: ["Email", "Automação", "Marketing"],
+    },
+    {
+      id: 2,
+      title: "Integração com APIs",
+      description: "Conecte diferentes APIs e sincronize dados automaticamente",
+      tags: ["API", "Integração", "Dados"],
+    },
+    {
+      id: 3,
+      title: "Webhooks e Notificações",
+      description: "Receba e processe webhooks com notificações em tempo real",
+      tags: ["Webhook", "Notificação", "Real-time"],
+    },
+    {
+      id: 4,
+      title: "Processamento de Dados",
+      description: "Transforme e processe grandes volumes de dados",
+      tags: ["Dados", "ETL", "Processamento"],
+    },
+  ];
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session) {
-        navigate("/downloads");
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [navigate]);
+  const handleDownload = () => {
+    navigate("/downloads");
+  };
 
   return (
     <div className="min-h-screen bg-gradient-hero">
@@ -46,8 +55,8 @@ const Index = () => {
           </h1>
           
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Automatize seus processos com workflows prontos. Basta seguir no
-            Instagram e fazer login para acessar.
+            Automatize seus processos com workflows prontos para usar.
+            Baixe gratuitamente e comece a automatizar hoje mesmo!
           </p>
         </div>
 
@@ -78,23 +87,69 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Main CTA */}
-        <div className="max-w-md mx-auto space-y-6">
-          {!hasFollowed ? (
-            <InstagramGate onFollowed={() => setHasFollowed(true)} />
-          ) : (
-            <div className="space-y-4 text-center">
-              <div className="p-8 rounded-2xl bg-card shadow-soft">
-                <h2 className="text-2xl font-bold mb-4">
-                  Faça Login para Continuar
-                </h2>
-                <p className="text-muted-foreground mb-6">
-                  Use sua conta Google para acessar os downloads
+        {/* Workflows Grid */}
+        <div className="max-w-6xl mx-auto space-y-8">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold mb-2">Workflows Disponíveis</h2>
+            <p className="text-muted-foreground">
+              Explore nossa coleção de automações prontas
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {workflows.map((workflow) => (
+              <Card
+                key={workflow.id}
+                className="p-6 hover:shadow-glow transition-all duration-300 cursor-pointer bg-card/80 backdrop-blur-sm"
+              >
+                <div className="flex items-start gap-4">
+                  <div className="p-3 rounded-lg bg-gradient-primary shrink-0">
+                    <FileJson className="h-6 w-6 text-primary-foreground" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-lg font-semibold mb-2">
+                      {workflow.title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground mb-3">
+                      {workflow.description}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {workflow.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="px-2 py-1 bg-muted rounded-md text-xs font-medium"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
+
+          {/* CTA */}
+          <div className="text-center pt-8">
+            <Card className="inline-block p-8 shadow-soft">
+              <div className="space-y-4">
+                <h3 className="text-2xl font-bold">
+                  Pronto para Começar?
+                </h3>
+                <p className="text-muted-foreground max-w-md">
+                  Clique no botão abaixo para baixar todos os workflows gratuitamente
                 </p>
-                <GoogleAuthButton />
+                <Button
+                  onClick={handleDownload}
+                  size="lg"
+                  className="bg-gradient-primary hover:shadow-glow transition-all duration-300 font-semibold text-lg px-8"
+                >
+                  <Download className="mr-2 h-5 w-5" />
+                  Baixar Workflows Grátis
+                </Button>
               </div>
-            </div>
-          )}
+            </Card>
+          </div>
         </div>
       </div>
     </div>
