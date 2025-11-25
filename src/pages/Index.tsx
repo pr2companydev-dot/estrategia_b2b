@@ -9,6 +9,7 @@ import { useCart } from "@/contexts/CartContext";
 import { workflows } from "@/data/workflows";
 import { useToast } from "@/hooks/use-toast";
 import { Footer } from "@/components/Footer";
+import { ScrollToTop } from "@/components/ScrollToTop";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -40,6 +41,8 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-hero">
+      <ScrollToTop />
+      
       {/* Header with Cart */}
       <div className="sticky top-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border/50">
         <div className="container mx-auto px-4 py-4">
@@ -113,7 +116,7 @@ const Index = () => {
 
         {/* Features */}
         <div className="grid md:grid-cols-3 gap-6 mb-12 max-w-4xl mx-auto">
-          <div className="text-center space-y-2 p-6 rounded-xl bg-card/50 backdrop-blur-sm border border-border/50">
+          <div className="text-center space-y-2 p-6 rounded-xl bg-card/50 backdrop-blur-sm border border-border/50 hover-scale transition-all duration-300 animate-in slide-in-from-bottom-3 delay-100">
             <Download className="w-8 h-8 text-primary mx-auto" />
             <h3 className="font-semibold">100% Gratuito</h3>
             <p className="text-sm text-muted-foreground">
@@ -121,7 +124,7 @@ const Index = () => {
             </p>
           </div>
           
-          <div className="text-center space-y-2 p-6 rounded-xl bg-card/50 backdrop-blur-sm border border-border/50">
+          <div className="text-center space-y-2 p-6 rounded-xl bg-card/50 backdrop-blur-sm border border-border/50 hover-scale transition-all duration-300 animate-in slide-in-from-bottom-3 delay-200">
             <Zap className="w-8 h-8 text-primary mx-auto" />
             <h3 className="font-semibold">Pronto para Usar</h3>
             <p className="text-sm text-muted-foreground">
@@ -129,7 +132,7 @@ const Index = () => {
             </p>
           </div>
           
-          <div className="text-center space-y-2 p-6 rounded-xl bg-card/50 backdrop-blur-sm border border-border/50">
+          <div className="text-center space-y-2 p-6 rounded-xl bg-card/50 backdrop-blur-sm border border-border/50 hover-scale transition-all duration-300 animate-in slide-in-from-bottom-3 delay-300">
             <WorkflowIcon className="w-8 h-8 text-primary mx-auto" />
             <h3 className="font-semibold">Testados</h3>
             <p className="text-sm text-muted-foreground">
@@ -150,10 +153,11 @@ const Index = () => {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredWorkflows.map((workflow) => (
+            {filteredWorkflows.map((workflow, index) => (
               <Card
                 key={workflow.id}
-                className="p-6 hover:shadow-glow transition-all duration-300 bg-card/80 backdrop-blur-sm flex flex-col"
+                className="p-6 hover:shadow-glow hover-scale transition-all duration-300 bg-card/80 backdrop-blur-sm flex flex-col animate-in fade-in"
+                style={{ animationDelay: `${index * 50}ms` }}
               >
                 <div className="flex items-start gap-4 mb-4">
                   <div className="p-3 rounded-lg bg-gradient-primary shrink-0">

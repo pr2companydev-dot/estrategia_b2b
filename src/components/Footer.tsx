@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
 
 export const Footer = () => {
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <footer className="border-t border-border/50 mt-12 bg-background/50 backdrop-blur-sm">
       <div className="container mx-auto px-4 py-8">
@@ -14,6 +18,7 @@ export const Footer = () => {
           <div className="flex gap-6 text-sm">
             <Link 
               to="/privacy" 
+              onClick={scrollToTop}
               className="text-muted-foreground hover:text-primary transition-colors"
             >
               Política de Privacidade

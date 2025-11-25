@@ -5,6 +5,7 @@ import { useCart } from "@/contexts/CartContext";
 import { ArrowLeft, Trash2, ShoppingCart, Download } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Footer } from "@/components/Footer";
+import { ScrollToTop } from "@/components/ScrollToTop";
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -33,6 +34,8 @@ const Cart = () => {
 
   return (
     <div className="min-h-screen bg-gradient-hero">
+      <ScrollToTop />
+      
       {/* Header */}
       <div className="bg-background/80 backdrop-blur-lg border-b border-border/50">
         <div className="container mx-auto px-4 py-4">
@@ -49,7 +52,7 @@ const Cart = () => {
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-4xl mx-auto space-y-8">
           {/* Title */}
-          <div className="text-center space-y-2">
+          <div className="text-center space-y-2 animate-in fade-in duration-500">
             <h1 className="text-4xl font-bold tracking-tight">
               Seu Carrinho
             </h1>
@@ -59,7 +62,7 @@ const Cart = () => {
           </div>
 
           {cart.length === 0 ? (
-            <Card className="p-12 text-center">
+            <Card className="p-12 text-center animate-in scale-in duration-500">
               <ShoppingCart className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
               <h2 className="text-2xl font-bold mb-2">Carrinho Vazio</h2>
               <p className="text-muted-foreground mb-6">
