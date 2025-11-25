@@ -68,7 +68,13 @@ export const InstagramGate = ({ onFollowed }: InstagramGateProps) => {
         </div>
 
         <p className="text-xs text-muted-foreground pt-4">
-          Ao continuar, você concorda em fazer login com sua conta Google
+          Ao continuar, você concorda com nossa{" "}
+          <a
+            href="/privacy"
+            className="text-primary hover:underline"
+          >
+            Política de Privacidade
+          </a>
         </p>
       </div>
     </Card>
