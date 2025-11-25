@@ -14,7 +14,7 @@ export const GoogleAuthButton = () => {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: "https://estrategiab2b.com.br/downloads",
+          redirectTo: `${window.location.origin}/downloads`,
         },
       });
 
